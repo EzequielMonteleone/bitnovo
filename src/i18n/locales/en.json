@@ -1,0 +1,47 @@
+{
+  "common": {
+    "close": "Close",
+    "search": "Search",
+    "send": "Send"
+  },
+  "create": {
+    "title": "Create payment",
+    "concept": "Concept",
+    "notesPlaceholder": "Add a description for the payment"
+  },
+  "error": {
+    "createPayment": "Error creating the payment. Please try again."
+  },
+  "button": {
+    "creating": "Creating payment...",
+    "continue": "Continue"
+  },
+  "success": {
+    "title": "Payment received",
+    "subtitle": "The payment has been confirmed successfully.",
+    "newRequest": "New request",
+    "done": "Done"
+  },
+  "currency": {
+    "select": "Select a currency",
+    "EUR": "Euro",
+    "USD": "US Dollar",
+    "GBP": "Pound Sterling"
+  },
+  "countries": {
+    "select": "Select a country"
+  },
+  "qr": {
+    "info": "Scan the QR and you will be redirected to the Bitnovo pay gateway.",
+    "updatedAutomatically": "This screen will update automatically."
+  },
+  "share": {
+    "message": "Pay {{amount}} {{fiat}} with Bitnovo: {{url}}",
+    "emailSubject": "Bitnovo Payment",
+    "requestSubject": "Payment request",
+    "shareMessage": "Share the payment link with the customer",
+    "emailMessage": "Send via email",
+    "shareOtherPlatforms": "Share with other apps",
+    "whatsappNumber": "Enter WhatsApp number"
+  }
+}

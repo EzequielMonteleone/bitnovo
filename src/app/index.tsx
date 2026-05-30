@@ -1,62 +1,119 @@
-import * as Device from 'expo-device';
-import { Platform, StyleSheet } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import {useMutation} from '@tanstack/react-query';
+import {AxiosResponse} from 'axios';
+import {useRouter} from 'expo-router';
+import {useCallback, useMemo, useState} from 'react';
+import {useTranslation} from 'react-i18next';
+import {ScrollView, StyleSheet, TextInput} from 'react-native';
 
-import { AnimatedIcon } from '@/components/animated-icon';
-import { HintRow } from '@/components/hint-row';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { WebBadge } from '@/components/web-badge';
-import { BottomTabInset, MaxContentWidth, Spacing } from '@/constants/theme';
+import {createPayment} from '@/api/payments';
+import CurrencyHeader from '@/components/headers/currencyHeader';
+import {ThemedText} from '@/components/themed-text';
+import {ThemedView} from '@/components/themed-view';
+import {Button} from '@/components/ui/button';
+import {Spacing} from '@/constants/theme';
+import {useCurrencyStore} from '@/store/currency-store';
+import {CreatePaymentPayload, OrderResponse} from '@/types/payments';
 
-function getDevMenuHint() {
-  if (Platform.OS === 'web') {
-    return <ThemedText type="small">use browser devtools</ThemedText>;
-  }
-  if (Device.isDevice) {
-    return (
-      <ThemedText type="small">
-        shake device or press <ThemedText type="code">m</ThemedText> in terminal
-      </ThemedText>
-    );
-  }
-  const shortcut = Platform.OS === 'android' ? 'cmd+m (or ctrl+m)' : 'cmd+d';
-  return (
-    <ThemedText type="small">
-      press <ThemedText type="code">{shortcut}</ThemedText>
-    </ThemedText>
+export default function CreatePaymentScreen() {
+  const router = useRouter();
+  const {t} = useTranslation();
+  const [amount, setAmount] = useState('');
+  const [notes, setNotes] = useState('');
+  const fiat = useCurrencyStore(state => state.fiat);
+  const currencyOptions = useCurrencyStore(state => state.options);
+  const currencySymbol = useMemo(
+    () => currencyOptions.find(option => option.value === fiat)?.symbol ?? fiat,
+    [currencyOptions, fiat],
   );
-}
+  const mutation = useMutation<
+    AxiosResponse<OrderResponse>,
+    Error,
+    CreatePaymentPayload
+  >({
+    mutationFn: createPayment,
+    onSuccess: response => {
+      const data = response.data;
+      router.replace({
+        pathname: '/share',
+        params: {
+          identifier: data.identifier,
+          web_url: data.web_url,
+          amount,
+          fiat,
+        },
+      });
+    },
+  });
 
-export default function HomeScreen() {
+  const parsedAmount = useMemo(
+    () => Number(amount.replace(',', '.')),
+    [amount],
+  );
+  const canSubmit = useMemo(
+    () => parsedAmount > 0 && notes.trim().length > 0,
+    [parsedAmount, notes],
+  );
+
+  const handleSubmit = useCallback(() => {
+    if (!canSubmit) {
+      return;
+    }
+
+    mutation.mutate({
+      expected_output_amount: parsedAmount,
+      fiat,
+      notes: notes.trim(),
+    });
+  }, [canSubmit, fiat, mutation, notes, parsedAmount]);
+
   return (
     <ThemedView style={styles.container}>
-      <SafeAreaView style={styles.safeArea}>
-        <ThemedView style={styles.heroSection}>
-          <AnimatedIcon />
-          <ThemedText type="title" style={styles.title}>
-            Welcome to&nbsp;Expo
-          </ThemedText>
-        </ThemedView>
-
-        <ThemedText type="code" style={styles.code}>
-          get started
-        </ThemedText>
-
-        <ThemedView type="backgroundElement" style={styles.stepContainer}>
-          <HintRow
-            title="Try editing"
-            hint={<ThemedText type="code">src/app/index.tsx</ThemedText>}
+      <CurrencyHeader title={t('create.title')} />
+      <ScrollView contentContainerStyle={styles.body}>
+        <ThemedView style={styles.body}>
+          <TextInput
+            style={styles.amountInput}
+            value={amount}
+            onChangeText={setAmount}
+            placeholder={`0.00 ${currencySymbol}`}
+            keyboardType="decimal-pad"
+            placeholderTextColor="#002859"
           />
-          <HintRow title="Dev tools" hint={getDevMenuHint()} />
-          <HintRow
-            title="Fresh start"
-            hint={<ThemedText type="code">npm run reset-project</ThemedText>}
-          />
-        </ThemedView>
 
-        {Platform.OS === 'web' && <WebBadge />}
-      </SafeAreaView>
+          <ThemedView style={styles.card}>
+            <ThemedText type="smallBold">{t('create.concept')}</ThemedText>
+            <ThemedView style={styles.containerInput}>
+              <TextInput
+                style={styles.notesInput}
+                value={notes}
+                onChangeText={setNotes}
+                placeholder={t('create.notesPlaceholder')}
+                placeholderTextColor="#9CA3AF"
+                multiline
+              />
+            </ThemedView>
+          </ThemedView>
+
+          {mutation.error && (
+            <ThemedText
+              type="small"
+              themeColor="textSecondary"
+              style={styles.errorText}>
+              {t('error.createPayment')}
+            </ThemedText>
+          )}
+        </ThemedView>
+        <Button
+          style={[
+            styles.submitButton,
+            (!canSubmit || mutation.isPending) && styles.disabledButton,
+          ]}
+          disabled={!canSubmit || mutation.isPending}
+          loading={mutation.isPending}
+          onPress={handleSubmit}>
+          {mutation.isPending ? t('button.creating') : t('button.continue')}
+        </Button>
+      </ScrollView>
     </ThemedView>
   );
 }
@@ -64,35 +121,41 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    flexDirection: 'row',
+    backgroundColor: '#FFFFFF',
   },
-  safeArea: {
-    flex: 1,
-    paddingHorizontal: Spacing.four,
-    alignItems: 'center',
+
+  body: {flex: 1},
+  card: {
+    padding: Spacing.three,
     gap: Spacing.three,
-    paddingBottom: BottomTabInset + Spacing.three,
-    maxWidth: MaxContentWidth,
   },
-  heroSection: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    flex: 1,
-    paddingHorizontal: Spacing.four,
-    gap: Spacing.four,
+  amountInput: {
+    fontSize: 40,
+    fontWeight: '700',
+    paddingVertical: Spacing.two,
+    alignSelf: 'center',
+    marginTop: Spacing.five,
+    color: '#002859',
   },
-  title: {
-    textAlign: 'center',
+  notesInput: {
+    paddingVertical: Spacing.two,
+    fontSize: 16,
   },
-  code: {
-    textTransform: 'uppercase',
+  errorText: {
+    color: '#B91C1C',
+    marginHorizontal: Spacing.three,
   },
-  stepContainer: {
-    gap: Spacing.three,
-    alignSelf: 'stretch',
-    paddingHorizontal: Spacing.three,
+  submitButton: {
     paddingVertical: Spacing.four,
-    borderRadius: Spacing.four,
+    marginHorizontal: Spacing.three,
+  },
+  disabledButton: {
+    opacity: 0.5,
+  },
+  containerInput: {
+    padding: 8,
+    borderRadius: 8,
+    borderColor: '#E0E0E0',
+    borderWidth: 1,
   },
 });
