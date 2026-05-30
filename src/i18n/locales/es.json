@@ -7,7 +7,8 @@
   "create": {
     "title": "Crear pago",
     "concept": "Concepto",
-    "notesPlaceholder": "Añade descripción del pago"
+    "notesPlaceholder": "Añade descripción del pago",
+    "notesCounter": "{{count}}/{{max}} caracteres"
   },
   "error": {
     "createPayment": "Error al crear el pago. Intenta de nuevo."

@@ -14,6 +14,8 @@ import {Spacing} from '@/constants/theme';
 import {useCurrencyStore} from '@/store/currency-store';
 import {CreatePaymentPayload, OrderResponse} from '@/types/payments';
 
+const NOTES_MAX_LENGTH = 140;
+
 export default function CreatePaymentScreen() {
   const router = useRouter();
   const {t} = useTranslation();
@@ -89,9 +91,19 @@ export default function CreatePaymentScreen() {
                 onChangeText={setNotes}
                 placeholder={t('create.notesPlaceholder')}
                 placeholderTextColor="#9CA3AF"
+                maxLength={NOTES_MAX_LENGTH}
                 multiline
               />
             </ThemedView>
+            <ThemedText
+              type="small"
+              themeColor="textSecondary"
+              style={styles.notesCounter}>
+              {t('create.notesCounter', {
+                count: notes.length,
+                max: NOTES_MAX_LENGTH,
+              })}
+            </ThemedText>
           </ThemedView>
 
           {mutation.error && (
@@ -140,6 +152,12 @@ const styles = StyleSheet.create({
   notesInput: {
     paddingVertical: Spacing.two,
     fontSize: 16,
+    minHeight: 84,
+    textAlignVertical: 'top',
+  },
+  notesCounter: {
+    alignSelf: 'flex-end',
+    marginTop: -Spacing.two,
   },
   errorText: {
     color: '#B91C1C',

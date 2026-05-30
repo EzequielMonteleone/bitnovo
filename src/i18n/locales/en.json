@@ -7,7 +7,8 @@
   "create": {
     "title": "Create payment",
     "concept": "Concept",
-    "notesPlaceholder": "Add a description for the payment"
+    "notesPlaceholder": "Add a description for the payment",
+    "notesCounter": "{{count}}/{{max}} characters"
   },
   "error": {
     "createPayment": "Error creating the payment. Please try again."
