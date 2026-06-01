@@ -120,6 +120,7 @@ const ShareScreen = () => {
           <ThemedView style={styles.linkContainer}>
             <SvgLink />
             <ThemedText
+              numberOfLines={1}
               style={styles.linkText}
               themeColor="primary"
               type="small">
@@ -135,6 +136,7 @@ const ShareScreen = () => {
           <ThemedView style={styles.linkContainer}>
             <SvgSms />
             <ThemedText
+              numberOfLines={1}
               style={styles.linkText}
               themeColor="primary"
               type="small">
@@ -154,6 +156,7 @@ const ShareScreen = () => {
             <SvgArrowDown />
           </Pressable>
           <TextInput
+            numberOfLines={1}
             style={styles.inputNumber}
             keyboardType="phone-pad"
             placeholder={t('share.whatsappNumber')}
@@ -178,6 +181,7 @@ const ShareScreen = () => {
           <ThemedView style={styles.linkContainer}>
             <SvgExport />
             <ThemedText
+              numberOfLines={1}
               style={styles.linkText}
               themeColor="primary"
               type="small">
