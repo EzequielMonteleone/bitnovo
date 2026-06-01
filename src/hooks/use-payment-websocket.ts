@@ -59,7 +59,9 @@ export function usePaymentWebsocket(identifier?: string | null) {
     socket.onopen = () => {
       setState(current => {
         const nextState =
-          current.identifier === identifier ? current : getInitialState(identifier);
+          current.identifier === identifier
+            ? current
+            : getInitialState(identifier);
 
         return {
           ...nextState,
@@ -75,7 +77,9 @@ export function usePaymentWebsocket(identifier?: string | null) {
       const paymentStatus = getPaymentStatus(payload);
       setState(current => {
         const nextState =
-          current.identifier === identifier ? current : getInitialState(identifier);
+          current.identifier === identifier
+            ? current
+            : getInitialState(identifier);
 
         return {
           ...nextState,
@@ -92,7 +96,9 @@ export function usePaymentWebsocket(identifier?: string | null) {
     socket.onerror = event => {
       setState(current => {
         const nextState =
-          current.identifier === identifier ? current : getInitialState(identifier);
+          current.identifier === identifier
+            ? current
+            : getInitialState(identifier);
 
         return {
           ...nextState,
@@ -107,7 +113,9 @@ export function usePaymentWebsocket(identifier?: string | null) {
     socket.onclose = () => {
       setState(current => {
         const nextState =
-          current.identifier === identifier ? current : getInitialState(identifier);
+          current.identifier === identifier
+            ? current
+            : getInitialState(identifier);
 
         return {
           ...nextState,
