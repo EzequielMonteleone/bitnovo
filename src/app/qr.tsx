@@ -27,7 +27,7 @@ const QrScreen = () => {
 
   useEffect(() => {
     if (identifier && isPaid) {
-      router.replace({pathname: '/success'} as any);
+      router.replace({pathname: '/success'});
     }
   }, [identifier, isPaid, router]);
 

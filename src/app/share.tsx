@@ -85,7 +85,7 @@ const ShareScreen = () => {
         fiat,
         symbol: currencySymbol,
       },
-    } as any);
+    });
   }, [amount, currencySymbol, fiat, identifier, router, webUrl]);
 
   const handleOnSelectCountry = useCallback(() => {
@@ -161,7 +161,7 @@ const ShareScreen = () => {
             keyboardType="phone-pad"
             placeholder={t('share.whatsappNumber')}
             value={whatsappNumber}
-            maxLength={10}
+            maxLength={15}
             onChangeText={setWhatsappNumber}
           />
           <Pressable
