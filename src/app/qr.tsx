@@ -19,9 +19,8 @@ const QrScreen = () => {
   const webUrl = params.web_url
     ? decodeURIComponent(params.web_url as string)
     : '';
-  const amount = (params.amount as string) ?? '';
-  const fiat = (params.fiat as string) ?? 'EUR';
-  const symbol = (params.symbol as string) ?? fiat;
+  const amount = params.amount;
+  const symbol = params.symbol;
 
   const {isPaid} = usePaymentWebsocket(identifier);
 
