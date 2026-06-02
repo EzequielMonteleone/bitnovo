@@ -4,10 +4,11 @@ import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
 import {DarkTheme, DefaultTheme, Stack, ThemeProvider} from 'expo-router';
 import {StatusBar} from 'expo-status-bar';
 import {useColorScheme} from 'react-native';
-import '../reactotron';
 import '../i18n';
+import '../reactotron';
 
 const queryClient = new QueryClient();
+const hideHeader = {headerShown: false};
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
@@ -18,12 +19,12 @@ export default function RootLayout() {
         <MainContainer>
           <KeyboardView>
             <Stack>
-              <Stack.Screen name="index" options={{headerShown: false}} />
-              <Stack.Screen name="qr" options={{headerShown: false}} />
-              <Stack.Screen name="share" options={{headerShown: false}} />
-              <Stack.Screen name="success" options={{headerShown: false}} />
-              <Stack.Screen name="currency" options={{headerShown: false}} />
-              <Stack.Screen name="countries" options={{headerShown: false}} />
+              <Stack.Screen name="index" options={hideHeader} />
+              <Stack.Screen name="qr" options={hideHeader} />
+              <Stack.Screen name="share" options={hideHeader} />
+              <Stack.Screen name="success" options={hideHeader} />
+              <Stack.Screen name="currency" options={hideHeader} />
+              <Stack.Screen name="countries" options={hideHeader} />
             </Stack>
           </KeyboardView>
         </MainContainer>
