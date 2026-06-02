@@ -44,5 +44,8 @@
     "emailMessage": "Enviar por correo electrónico",
     "shareOtherPlatforms": "Compartir con otras aplicaciones",
     "whatsappNumber": "Introduce el número de WhatsApp"
+  },
+  "search": {
+    "noResults": "No se encontraron resultados"
   }
 }

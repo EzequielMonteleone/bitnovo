@@ -1,5 +1,6 @@
 import {Spacing} from '@/constants/theme';
 import {FC, useCallback, useMemo, useState} from 'react';
+import {useTranslation} from 'react-i18next';
 import {FlatList, StyleSheet, View} from 'react-native';
 import {ThemedText} from '../themed-text';
 import {ThemedView} from '../themed-view';
@@ -19,7 +20,7 @@ interface SearchComponentProps {
 
 const SearchComponent: FC<SearchComponentProps> = ({items, onSelect}) => {
   const [query, setQuery] = useState('');
-
+  const {t} = useTranslation();
   const handleSearchChange = useCallback((value: string) => {
     setQuery(value);
   }, []);
@@ -48,7 +49,7 @@ const SearchComponent: FC<SearchComponentProps> = ({items, onSelect}) => {
         renderItem={({item}) => <SearchRow item={item} onSelect={onSelect} />}
         ListEmptyComponent={
           <View style={styles.emptyContainer}>
-            <ThemedText>{'No results found'}</ThemedText>
+            <ThemedText>{t('search.noResults')}</ThemedText>
           </View>
         }
       />

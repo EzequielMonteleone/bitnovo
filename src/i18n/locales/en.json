@@ -44,5 +44,8 @@
     "emailMessage": "Send via email",
     "shareOtherPlatforms": "Share with other apps",
     "whatsappNumber": "Enter WhatsApp number"
+  },
+  "search": {
+    "noResults": "No results found"
   }
 }
