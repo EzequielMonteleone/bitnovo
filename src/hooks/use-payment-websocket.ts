@@ -1,7 +1,6 @@
 import {WS_BASE_URL} from '@env';
 import {useEffect, useState} from 'react';
 
-const DEFAULT_WS_BASE_URL = 'wss://payments.pre-bnvo.com/ws/merchant';
 const PAYMENT_COMPLETE_STATUSES = new Set(['AC', 'CM', 'CO']);
 
 type PaymentWebsocketState = {
@@ -53,7 +52,7 @@ export function usePaymentWebsocket(identifier?: string | null) {
       return;
     }
 
-    const socketUrl = `${WS_BASE_URL ?? DEFAULT_WS_BASE_URL}/${identifier}`;
+    const socketUrl = `${WS_BASE_URL}/${identifier}`;
     const socket = new WebSocket(socketUrl);
 
     socket.onopen = () => {
